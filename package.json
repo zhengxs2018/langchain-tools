@@ -17,7 +17,8 @@
   ],
   "publishConfig": {
     "access": "public",
-    "directory": "package"
+    "directory": "package",
+    "registry": "https://registry.npmjs.org"
   },
   "clean-publish": {
     "withoutPublish": true,
@@ -28,7 +29,7 @@
     "watch": "vite build --watch --mode=development",
     "build": "vite build",
     "fmt": "prettier --write src samples vite.config.mts --log-level warn",
-    "prepublishOnly": "npm run build &&  -rf ./package && clean-publish",
+    "prepublishOnly": "npm run build && rm -rf ./package && clean-publish",
     "postpublish": "rm -rf ./package"
   },
   "dependencies": {
