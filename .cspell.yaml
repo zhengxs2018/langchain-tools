@@ -1,0 +1,26 @@
+version: "0.2"
+ignorePaths:
+  - archive
+  - node_modules
+dictionaries:
+  - en_US
+  - softwareTerms
+  - bash
+  - node
+  - npm
+  - html
+  - css
+  - typescript
+  - filetypes
+words:
+  - baiduwenxin
+  - langchain
+  - longcontext
+  - openai
+  - postpublish
+  - qianfan
+  - qwen
+  - tongyi
+  - trivago
+ignoreWords:
+  - zhengxs
