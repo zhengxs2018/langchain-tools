@@ -8,14 +8,14 @@ export abstract class ModelRegistryFactory<
 
   constructor(entries?: ModelFactoryInit[] | null) {
     this.mediator = new Map(
-      entries?.map(item => [item.name, this.resolve_meta_information(item)]),
+      entries?.map(item => [item.name, this.resolve_registration_information(item)]),
     );
   }
 
-  create_llm(
+  create_llm<Model = ReturnType<RegistrationInformation['create_llm']>>(
     options: { provider?: string; model?: string },
     context: NonNullable<unknown> = {},
-  ): unknown {
+  ): Model | undefined {
     let item: RegistrationInformation | undefined;
 
     if (options.provider) {
@@ -28,7 +28,7 @@ export abstract class ModelRegistryFactory<
 
     if (!item) return;
 
-    return item.create_llm({ ...item.options, ...options }, context);
+    return item.create_llm({ ...item.options, ...options }, context) as Model;
   }
 
   /**
@@ -57,7 +57,7 @@ export abstract class ModelRegistryFactory<
       console.warn(`LLMModel ${init.name} duplicate registration`);
     }
 
-    this.append(this.resolve_meta_information(init));
+    this.append(this.resolve_registration_information(init));
   }
 
   append(info: RegistrationInformation) {
@@ -72,10 +72,14 @@ export abstract class ModelRegistryFactory<
     this.mediator.clear();
   }
 
-  protected resolve_meta_information<T extends LLMType = LLMType>(
+  protected resolve_registration_information<T extends LLMType = LLMType>(
     init: ModelFactoryInit<T>,
   ) {
+    // Omit the llm attribute
+    const { llm, ...rest } = init
+
     return <RegistrationInformation>{
+      ...rest,
       name: init.name,
       options: init.options || {},
       is_match: this.resolve_model_matcher(init),
@@ -83,9 +87,25 @@ export abstract class ModelRegistryFactory<
     };
   }
 
-  protected abstract resolve_llm_engine<T extends LLMType = LLMType>(
+  protected resolve_llm_engine<T extends LLMType = LLMType>(
     init: ModelFactoryInit<T>,
-  ): RegistrationInformation['create_llm'];
+  ): RegistrationInformation['create_llm'] {
+
+    const llm = init.llm;
+    if (llm) return () => llm;
+
+    const create_llm = init.create_llm;
+
+    if (typeof create_llm === 'function') {
+      return create_llm;
+    }
+
+    return this.create_llm_engine(init)
+  }
+
+  protected abstract create_llm_engine<T extends LLMType = LLMType>(
+    init: ModelFactoryInit<T>,
+  ): RegistrationInformation['create_llm']
 
   protected resolve_model_matcher(
     init: ModelFactoryInit,
@@ -103,16 +123,18 @@ export interface ModelFactoryInit<T extends LLMType = LLMType>
   name: T;
   provider?: T;
   options?: object;
+  create_llm?: (...args: any[]) => NonNullable<unknown>
+  [key: string]: unknown;
 }
-
-// export type ModelCreator = (...args: any[]) => any;
 
 export interface ModelFactoryInformation<
   T extends LLMType = LLMType,
   Model = NonNullable<unknown>,
 > {
   name: T;
-  is_match?: Matcher.AssertPredicate<NonNullable<unknown>>;
   options: object;
+  provider?: T;
+  is_match?: Matcher.AssertPredicate<NonNullable<unknown>>;
   create_llm: (...args: any[]) => Model;
+  [key: string]: unknown;
 }

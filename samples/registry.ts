@@ -2,7 +2,7 @@ import { BaseMessage } from '@langchain/core/messages';
 
 import { type ChatModelCallOptions, ChatModelFactoryRegistry } from '../src';
 
-export const modeRegistry = new ChatModelFactoryRegistry([
+export const modelRegistry = new ChatModelFactoryRegistry([
    // 仅支持 ERNIE-Bot 模型
   {
     name: 'ERNIE-Bot',
@@ -35,7 +35,7 @@ export const modeRegistry = new ChatModelFactoryRegistry([
 export async function call_ai(
   options: ChatModelCallOptions & { messages: BaseMessage[] },
 ) {
-  const model = modeRegistry.build(options);
+  const model = modelRegistry.build(options);
 
   console.log('Found: ', model.lc_namespace.join('/'));
 

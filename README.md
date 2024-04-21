@@ -41,6 +41,13 @@ await model.invoke(messages);
 //=> AIMessage { content: "Hello! ...you may have." }
 ```
 
+当前内置的 provider：
+
+- **anthropic**： 走 Anthropic 的接口，需要 apiKey 参数
+- **openai**：走 OpenAI 的接口，需要 apiKey 参数
+- **qianfan**: 走的百度云的接口，需要 apiKey 和 secretKey 参数
+- **tongyi**：走通义千问的接口，需要 apiKey 参数
+
 ## 📖 使用文档
 
 ### 配置匹配规则
@@ -56,7 +63,7 @@ import {
 import { ChatLlamaCpp } from 'langchain/chat_models/llama_cpp';
 
 // 注意：配置的顺序会影响匹配规则
-export const freeRegistry = new ChatModelFactoryRegistry([
+export const modelRegistry = new ChatModelFactoryRegistry([
   {
     name: 'free-gpt-3.5',
     provider: 'openai', // 使用 openai 的模型
@@ -85,15 +92,15 @@ export const freeRegistry = new ChatModelFactoryRegistry([
 ]);
 
 // 模型匹配
-modeRegistry.build({ model: 'gpt-3.5-turbo' });
+modelRegistry.build({ model: 'gpt-3.5-turbo' });
 //=> ChatOpenAI
 
 // 模型匹配
-modeRegistry.build({ model: 'llama2-7b-chat-v2' });
+modelRegistry.build({ model: 'llama2-7b-chat-v2' });
 //=> ChatLlamaCpp
 
 // 快速调用
-modeRegistry.build({ provider: 'llama-cpp' });
+modelRegistry.build({ provider: 'llama-cpp' });
 //=> ChatLlamaCpp
 ```
 
@@ -107,7 +114,7 @@ import {
   create_openai_chat_model,
 } from '@zhengxs/langchain-tools';
 
-export const modeRegistry = new ChatModelFactoryRegistry([
+export const modelRegistry = new ChatModelFactoryRegistry([
   {
     name: 'openai',
     test: /^gpt-3/, // 匹配所有 gpt-3 开头的模型
@@ -128,10 +135,10 @@ export const modeRegistry = new ChatModelFactoryRegistry([
   },
 ]);
 
-modeRegistry.build({ model: 'gpt-3.5-turbo' });
+modelRegistry.build({ model: 'gpt-3.5-turbo' });
 //=> ChatOpenAI
 
-modeRegistry.build({ model: 'llama2-7b-chat-v2' });
+modelRegistry.build({ model: 'llama2-7b-chat-v2' });
 //=> ChatLlamaCpp
 ```
 

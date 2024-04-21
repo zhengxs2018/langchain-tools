@@ -1,6 +1,6 @@
 {
   "name": "@zhengxs/langchain-tools",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
   "author": "zhengxs2018",
   "license": "MIT",
   "sideEffects": false,

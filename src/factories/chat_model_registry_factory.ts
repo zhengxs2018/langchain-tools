@@ -1,8 +1,6 @@
-import { BaseChatModel } from '@langchain/core/language_models/chat_models';
-
 import {
-  create_chat_model,
   create_openai_chat_model,
+  create_chat_model_engine,
 } from '../helpers/create_chat_model';
 import type {
   ChatModelCallOptions,
@@ -23,6 +21,36 @@ export class ChatModelFactoryRegistry extends ModelRegistryFactory<
     super(entries);
   }
 
+  /**
+   * Generate a user-configured model or fallback to an openai model
+   *
+   * @param options - model options
+   * @param context - is match context
+   * @returns chat model
+   *
+   * @example
+   *
+   * ```ts
+   * const registry = new ChatModelFactoryRegistry([
+   *   {
+   *     name: 'tongyi',
+   *     test: /^(qwen|baichuan)/,
+   *   },
+   * ]);
+   *
+   * // Building with provider
+   * registry.build({ provider: 'tongyi' })
+   * //=> ChatAlibabaTongyi { }
+   *
+   * // Building with model
+   * registry.build({ model: 'baichuan-7b-v1' })
+   * //=> ChatAlibabaTongyi { }
+   *
+   * // fallback to openai model
+   * registry.build({ model: 'llama2-13b-chat-v2' })
+   * //=> ChatOpenAI { }
+   * ```
+   */
   build<T extends LLMType = LLMType>(
     options: ChatModelCallOptions<T> & { provider?: T },
     context?: NonNullable<unknown>,
@@ -31,6 +59,7 @@ export class ChatModelFactoryRegistry extends ModelRegistryFactory<
 
     if (llm) return llm;
 
+    // Note: fallback to openai model
     return create_openai_chat_model(
       options as ChatModelCallOptions<'openai'>,
     ) as InferToChatModel<T>;
@@ -46,18 +75,6 @@ export class ChatModelFactoryRegistry extends ModelRegistryFactory<
    * @param query - name or model name
    * @param context - is match context
    * @returns registration information
-   *
-   * @example
-   *
-   * ```ts
-   * const registry = new ChatModelFactoryRegistry([
-   *   {
-   *      name: 'openai',
-   *   }
-   * ])
-   *
-   * registry.search('openai')
-   * ```
    */
   search<T extends LLMType = LLMType>(
     query: InferToChatModelName<T>,
@@ -66,24 +83,10 @@ export class ChatModelFactoryRegistry extends ModelRegistryFactory<
     return super.search(query, context);
   }
 
-  protected resolve_llm_engine<T extends LLMType = LLMType>(
+  protected create_llm_engine<T extends LLMType = LLMType>(
     init: ChatModelFactoryInit<T>,
   ): ChatModelCreateEngine<T> {
-    const llm = init.llm;
-
-    if (llm && llm instanceof BaseChatModel) return () => llm;
-
-    const create_llm = init.create_llm;
-
-    if (typeof create_llm === 'function') {
-      return create_llm;
-    }
-
-    const provider = init.provider || init.name;
-
-    return (options: ChatModelCallOptions<T>) => {
-      return create_chat_model(provider, options);
-    };
+    return create_chat_model_engine(init.provider || init.name)
   }
 }
 
