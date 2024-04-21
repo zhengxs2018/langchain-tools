@@ -9,26 +9,26 @@ export function create_chat_model<T extends LLMType = LLMType>(
   provider: T | undefined,
   config: Partial<ChatModelCallOptions<T>>,
 ): InferToChatModel<T> {
-  return create_chat_model_engine<T>(provider)(config)
+  return create_chat_model_engine<T>(provider)(config);
 }
 
 export function create_chat_model_engine<
   T extends LLMType = LLMType,
-  U = (config: ChatModelCallOptions<T>) => InferToChatModel<T>
+  U = (config: ChatModelCallOptions<T>) => InferToChatModel<T>,
 >(provider: T | undefined): U {
   if (provider === 'anthropic') {
-    return create_anthropic_chat_model as U
+    return create_anthropic_chat_model as U;
   }
 
   if (provider === 'qianfan') {
-    return create_qianfan_chat_model as U
+    return create_qianfan_chat_model as U;
   }
 
   if (provider === 'tongyi') {
-    return create_tongyi_chat_model as U
+    return create_tongyi_chat_model as U;
   }
 
-  return create_openai_chat_model as U
+  return create_openai_chat_model as U;
 }
 
 export function create_anthropic_chat_model(

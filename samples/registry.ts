@@ -3,7 +3,7 @@ import { BaseMessage } from '@langchain/core/messages';
 import { type ChatModelCallOptions, ChatModelFactoryRegistry } from '../src';
 
 export const modelRegistry = new ChatModelFactoryRegistry([
-   // 仅支持 ERNIE-Bot 模型
+  // 仅支持 ERNIE-Bot 模型
   {
     name: 'ERNIE-Bot',
     provider: 'qianfan',

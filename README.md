@@ -69,7 +69,12 @@ await model.invoke(messages);
 
 ## 📖 使用文档
 
-- [对话模型注册工厂](./docs/chat_model_registry_factory.md)
+- [模型注册工厂](./docs/chat_model_registry_factory.md)
+- [消息压缩器](./docs/chat_message_compressor.md)
+
+## ⏳ 待办事项
+
+- [ ] 对话记忆胶囊
 
 ---
 
@@ -77,6 +82,5 @@ await model.invoke(messages);
 
 MIT
 
-[profile-link]: https://github.com/zhengxs2018
 [tongyi-api-key]: https://help.aliyun.com/zh/dashscope/developer-reference/activate-dashscope-and-create-an-api-key
 [wenxinworkshop]: https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application

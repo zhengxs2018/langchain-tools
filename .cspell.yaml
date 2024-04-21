@@ -20,6 +20,7 @@ words:
   - postpublish
   - qianfan
   - qwen
+  - tiktoken
   - tongyi
   - trivago
 ignoreWords:

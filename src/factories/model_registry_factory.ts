@@ -8,7 +8,10 @@ export abstract class ModelRegistryFactory<
 
   constructor(entries?: ModelFactoryInit[] | null) {
     this.mediator = new Map(
-      entries?.map(item => [item.name, this.resolve_registration_information(item)]),
+      entries?.map(item => [
+        item.name,
+        this.resolve_registration_information(item),
+      ]),
     );
   }
 
@@ -76,7 +79,7 @@ export abstract class ModelRegistryFactory<
     init: ModelFactoryInit<T>,
   ) {
     // Omit the llm attribute
-    const { llm, ...rest } = init
+    const { llm, ...rest } = init;
 
     return <RegistrationInformation>{
       ...rest,
@@ -90,7 +93,6 @@ export abstract class ModelRegistryFactory<
   protected resolve_llm_engine<T extends LLMType = LLMType>(
     init: ModelFactoryInit<T>,
   ): RegistrationInformation['create_llm'] {
-
     const llm = init.llm;
     if (llm) return () => llm;
 
@@ -100,12 +102,12 @@ export abstract class ModelRegistryFactory<
       return create_llm;
     }
 
-    return this.create_llm_engine(init)
+    return this.create_llm_engine(init);
   }
 
   protected abstract create_llm_engine<T extends LLMType = LLMType>(
     init: ModelFactoryInit<T>,
-  ): RegistrationInformation['create_llm']
+  ): RegistrationInformation['create_llm'];
 
   protected resolve_model_matcher(
     init: ModelFactoryInit,
@@ -123,7 +125,7 @@ export interface ModelFactoryInit<T extends LLMType = LLMType>
   name: T;
   provider?: T;
   options?: object;
-  create_llm?: (...args: any[]) => NonNullable<unknown>
+  create_llm?: (...args: any[]) => NonNullable<unknown>;
   [key: string]: unknown;
 }
 

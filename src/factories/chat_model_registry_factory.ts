@@ -1,6 +1,6 @@
 import {
-  create_openai_chat_model,
   create_chat_model_engine,
+  create_openai_chat_model,
 } from '../helpers/create_chat_model';
 import type {
   ChatModelCallOptions,
@@ -86,7 +86,7 @@ export class ChatModelFactoryRegistry extends ModelRegistryFactory<
   protected create_llm_engine<T extends LLMType = LLMType>(
     init: ChatModelFactoryInit<T>,
   ): ChatModelCreateEngine<T> {
-    return create_chat_model_engine(init.provider || init.name)
+    return create_chat_model_engine(init.provider || init.name);
   }
 }
 

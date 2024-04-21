@@ -1,6 +1,6 @@
 {
   "name": "@zhengxs/langchain-tools",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "author": "zhengxs2018",
   "license": "MIT",
   "sideEffects": false,
@@ -15,6 +15,11 @@
   "files": [
     "dist"
   ],
+  "homepage": "https://github.com/zhengxs2018/langchain-tools#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhengxs2018/langchain-tools.git"
+  },
   "publishConfig": {
     "access": "public",
     "directory": "package",
@@ -37,8 +42,10 @@
     "@langchain/community": "^0.0.50",
     "@langchain/core": "^0.1.58",
     "@langchain/openai": "^0.0.28",
+    "js-tiktoken": "^1.0.11",
     "langchain": "^0.1.34",
-    "openai": "^4.38.2"
+    "openai": "^4.38.2",
+    "quick-lru": "^7.0.0"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
