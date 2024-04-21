@@ -65,7 +65,7 @@ await model.invoke(messages);
 //=> AIMessage { content: "Hello! ...you may have." }
 ```
 
-除了内置的通道，也可以通过自定义工厂函数接入本地模型或反向代理的接口，详见 [对话模型注册工厂](./docs/chat_model_registry_factory.md))。
+除了内置的通道，也可以通过自定义工厂函数接入本地模型或反向代理的接口，详见 [对话模型注册工厂](./docs/chat_model_registry_factory.md)。
 
 ## 📖 使用文档
 
